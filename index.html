@@ -1,54 +1,53 @@
-
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="utf-8">
-  <title>관광지 지도</title>
-  <style>
-    html, body, #map {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-  <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f723177a920b33c1e3971e5c58b6ff90&autoload=false&libraries=services"></script>
+  <head>
+    <meta charset="utf-8" />
+    <title>관광지 지도</title>
+    <style>
+      html, body, #map {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f723177a920b33c1e3971e5c58b6ff90&autoload=false&libraries=services"></script>
+  </head>
+  <body>
+    <div id="map"></div>
 
-</head>
-<body>
-  <div id="map"></div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      var mapContainer = document.getElementById('map');
-      var mapOption = {
-        center: new kakao.maps.LatLng(33.3617, 126.5292),
-        level: 9
-      };
+    <script>
+      kakao.maps.load(function () {
+        var mapContainer = document.getElementById('map');
+        var mapOption = {
+          center: new kakao.maps.LatLng(33.3617, 126.5292),
+          level: 9
+        };
 
-      var map = new kakao.maps.Map(mapContainer, mapOption);
+        var map = new kakao.maps.Map(mapContainer, mapOption);
 
-      var places = [
-        {name: '성산일출봉', lat: 33.4589, lng: 126.9420},
-        {name: '한라산 국립공원', lat: 33.3625, lng: 126.5336},
-        {name: '협재 해수욕장', lat: 33.3920, lng: 126.2397}
-      ];
+        var places = [
+          { name: '성산일출봉', lat: 33.4589, lng: 126.9420 },
+          { name: '한라산 국립공원', lat: 33.3625, lng: 126.5336 },
+          { name: '협재 해수욕장', lat: 33.3920, lng: 126.2397 }
+        ];
 
-      places.forEach(function(place) {
-        var marker = new kakao.maps.Marker({
-          map: map,
-          position: new kakao.maps.LatLng(place.lat, place.lng),
-          title: place.name
-        });
+        places.forEach(function (place) {
+          var marker = new kakao.maps.Marker({
+            map: map,
+            position: new kakao.maps.LatLng(place.lat, place.lng),
+            title: place.name
+          });
 
-        var infowindow = new kakao.maps.InfoWindow({
-          content: '<div style="padding:5px;font-size:13px;">' + place.name + '</div>'
-        });
+          var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="padding:5px;font-size:13px;">' + place.name + '</div>'
+          });
 
-        kakao.maps.event.addListener(marker, 'click', function() {
-          infowindow.open(map, marker);
+          kakao.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+          });
         });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
