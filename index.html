@@ -1,19 +1,57 @@
+<!DOCTYPE html>
 <html>
-<head>
-	<meta charset="utf-8"/>
-	<title>Kakao 지도 시작하기</title>
-</head>
-<body>
-	<div id="map" style="width:500px;height:400px;"></div>
-	<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=f723177a920b33c1e3971e5c58b6ff90"></script>
-	<script>
-		var container = document.getElementById('map');
-		var options = {
-			center: new kakao.maps.LatLng(33.450701, 126.570667),
-			level: 3
-		};
+  <head>
+    <meta charset="utf-8" />
+    <title>카카오 지도 테스트</title>
+    <style>
+      html, body, #map {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
 
-		var map = new kakao.maps.Map(container, options);
-	</script>
-</body>
+    <!-- autoload=false: 자동 실행 막고 직접 실행 -->
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f723177a920b33c1e3971e5c58b6ff90&autoload=false&libraries=services"></script>
+  </head>
+
+  <body>
+    <div id="map"></div>
+
+    <script>
+      // JS SDK 로드가 끝난 뒤에 실행되도록!
+      kakao.maps.load(function () {
+        const container = document.getElementById('map');
+        const options = {
+          center: new kakao.maps.LatLng(33.3617, 126.5292),
+          level: 9,
+        };
+
+        const map = new kakao.maps.Map(container, options);
+
+        const places = [
+          { name: '성산일출봉', lat: 33.4589, lng: 126.9420 },
+          { name: '한라산 국립공원', lat: 33.3625, lng: 126.5336 },
+          { name: '협재 해수욕장', lat: 33.3920, lng: 126.2397 },
+        ];
+
+        places.forEach(function (place) {
+          const marker = new kakao.maps.Marker({
+            map: map,
+            position: new kakao.maps.LatLng(place.lat, place.lng),
+            title: place.name,
+          });
+
+          const infowindow = new kakao.maps.InfoWindow({
+            content: `<div style="padding:5px;font-size:13px;">${place.name}</div>`,
+          });
+
+          kakao.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+          });
+        });
+      });
+    </script>
+  </body>
 </html>
