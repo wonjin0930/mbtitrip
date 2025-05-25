@@ -11,39 +11,41 @@
         height: 100%;
       }
     </style>
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f723177a920b33c1e3971e5c58b6ff90&libraries=services"></script>
+    <!-- autoload=false 추가 -->
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f723177a920b33c1e3971e5c58b6ff90&autoload=false&libraries=services"></script>
   </head>
   <body>
     <div id="map"></div>
     <script>
-      // kakao.maps.load 제거함
-      var container = document.getElementById('map');
-      var options = {
-        center: new kakao.maps.LatLng(33.3617, 126.5292),
-        level: 9
-      };
+      kakao.maps.load(function () {
+        var container = document.getElementById('map');
+        var options = {
+          center: new kakao.maps.LatLng(33.3617, 126.5292),
+          level: 9
+        };
 
-      var map = new kakao.maps.Map(container, options);
+        var map = new kakao.maps.Map(container, options);
 
-      var places = [
-        { name: '성산일출봉', lat: 33.4589, lng: 126.9420 },
-        { name: '한라산 국립공원', lat: 33.3625, lng: 126.5336 },
-        { name: '협재 해수욕장', lat: 33.3920, lng: 126.2397 }
-      ];
+        var places = [
+          { name: '성산일출봉', lat: 33.4589, lng: 126.9420 },
+          { name: '한라산 국립공원', lat: 33.3625, lng: 126.5336 },
+          { name: '협재 해수욕장', lat: 33.3920, lng: 126.2397 }
+        ];
 
-      places.forEach(function (place) {
-        var marker = new kakao.maps.Marker({
-          map: map,
-          position: new kakao.maps.LatLng(place.lat, place.lng),
-          title: place.name
-        });
+        places.forEach(function (place) {
+          var marker = new kakao.maps.Marker({
+            map: map,
+            position: new kakao.maps.LatLng(place.lat, place.lng),
+            title: place.name
+          });
 
-        var infowindow = new kakao.maps.InfoWindow({
-          content: '<div style="padding:5px;font-size:13px;">' + place.name + '</div>'
-        });
+          var infowindow = new kakao.maps.InfoWindow({
+            content: '<div style="padding:5px;font-size:13px;">' + place.name + '</div>'
+          });
 
-        kakao.maps.event.addListener(marker, 'click', function () {
-          infowindow.open(map, marker);
+          kakao.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+          });
         });
       });
     </script>
