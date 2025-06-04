@@ -17,12 +17,29 @@
   <body>
     <div id="map"></div>
     <script>
+      let map; // 전역 선언
+
       kakao.maps.load(function () {
-        var map = new kakao.maps.Map(document.getElementById('map'), {
-          center: new kakao.maps.LatLng(37.5665, 126.9780),
-          level: 3
-        });
+        const container = document.getElementById('map');
+        const options = {
+          center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심: 서울
+          level: 7
+        };
+        map = new kakao.maps.Map(container, options);
       });
+
+      // Flutter에서 호출할 함수
+      function moveToRegion(region) {
+        const coords = {
+          '경주': new kakao.maps.LatLng(35.8562, 129.2247),
+          '제주': new kakao.maps.LatLng(33.4996, 126.5312),
+          '부산': new kakao.maps.LatLng(35.1796, 129.0756),
+          '평창': new kakao.maps.LatLng(37.3704, 128.3899),
+        };
+        if (coords[region]) {
+          map.setCenter(coords[region]);
+        }
+      }
     </script>
   </body>
 </html>
