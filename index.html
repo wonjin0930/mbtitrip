@@ -28,6 +28,40 @@
         map = new kakao.maps.Map(container, options);
       });
 
+      function renderMarkers(data, category) {
+  const markerImageUrl =
+    category === '관광지'
+      ? 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png'
+      : 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_blue.png';
+
+  const markerSize = new kakao.maps.Size(40, 40);
+
+  data.forEach((item) => {
+    if (!item.lat || !item.lon) return;
+
+    const markerPosition = new kakao.maps.LatLng(item.lat, item.lon);
+    const marker = new kakao.maps.Marker({
+      map: map,
+      position: markerPosition,
+      title: item.name,
+      image: new kakao.maps.MarkerImage(markerImageUrl, markerSize),
+    });
+
+    const infowindow = new kakao.maps.InfoWindow({
+      content: `<div style="padding:6px 12px;font-size:14px;">${item.name}</div>`,
+    });
+
+    kakao.maps.event.addListener(marker, 'mouseover', function () {
+      infowindow.open(map, marker);
+    });
+
+    kakao.maps.event.addListener(marker, 'mouseout', function () {
+      infowindow.close();
+    });
+  });
+}
+
+
       // Flutter에서 호출할 함수
       function moveToRegion(region) {
         const coords = {
