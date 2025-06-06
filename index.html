@@ -20,13 +20,16 @@
       let map; // 전역 선언
 
       kakao.maps.load(function () {
-        const container = document.getElementById('map');
-        const options = {
-          center: new kakao.maps.LatLng(37.5665, 126.9780), // 기본 중심: 서울
-          level: 7
-        };
-        map = new kakao.maps.Map(container, options);
-      });
+  const container = document.getElementById('map');
+  const options = {
+    center: new kakao.maps.LatLng(37.5665, 126.9780),
+    level: 7,
+  };
+  map = new kakao.maps.Map(container, options);
+
+  // ✅ 지도 준비 완료 표시
+  window.flutterMapReady = true;
+});
 
       function renderMarkers(data, category) {
   const markerImageUrl =
