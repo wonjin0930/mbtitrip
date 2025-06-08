@@ -19,6 +19,7 @@
     <script>
       let map;
       let currentMarkers = [];
+      let activeInfoWindow = null; // ✅ 현재 열린 InfoWindow
 
       kakao.maps.load(function () {
         const container = document.getElementById('map');
@@ -33,6 +34,7 @@
       function clearMarkers() {
         currentMarkers.forEach(marker => marker.setMap(null));
         currentMarkers = [];
+        activeInfoWindow = null; // 초기화 시 InfoWindow도 닫기
       }
 
       function renderMarkers(data, category) {
@@ -62,8 +64,14 @@
 
           kakao.maps.event.addListener(marker, 'mouseover', () => infowindow.open(map, marker));
           kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
+
           kakao.maps.event.addListener(marker, 'click', () => {
+            // ✅ 기존 InfoWindow 닫기
+            if (activeInfoWindow) activeInfoWindow.close();
+
             infowindow.open(map, marker);
+            activeInfoWindow = infowindow;
+
             if (window.markerClicked && window.markerClicked.postMessage) {
               window.markerClicked.postMessage(index.toString());
             }
@@ -89,9 +97,15 @@
         const marker = currentMarkers[index];
         if (marker) {
           map.setCenter(marker.getPosition());
-          new kakao.maps.InfoWindow({
+
+          // ✅ 기존 창 닫기
+          if (activeInfoWindow) activeInfoWindow.close();
+
+          const infowindow = new kakao.maps.InfoWindow({
             content: `<div style="padding:6px 12px;font-size:14px;">${marker.getTitle()}</div>`
-          }).open(map, marker);
+          });
+          infowindow.open(map, marker);
+          activeInfoWindow = infowindow;
         }
       }
     </script>
