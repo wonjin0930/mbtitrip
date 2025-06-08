@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
     <title>카카오 지도</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
       html, body, #map {
         margin: 0;
@@ -40,9 +40,10 @@
       function renderMarkers(data, category) {
         clearMarkers();
 
-        const markerImageUrl = category === '관광지'
-          ? 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png'
-          : 'https://wonjin0930.github.io/mbtitrip/image/restaurant.png';
+        const markerImageUrl =
+          category === '관광지'
+            ? 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png'
+            : 'https://wonjin0930.github.io/mbtitrip/image/restaurant.png';
 
         const markerSize = new kakao.maps.Size(40, 40);
 
@@ -71,8 +72,8 @@
             activeInfoWindow = infowindow;
 
             if (window.markerClicked && window.markerClicked.postMessage) {
-              const payload = JSON.stringify({ index, name: item.name });
-              window.markerClicked.postMessage(payload);
+              // ✅ 이름 정보를 JSON으로 전달
+              window.markerClicked.postMessage(JSON.stringify({ name: item.name }));
             }
           });
 
@@ -107,3 +108,4 @@
     </script>
   </body>
 </html>
+
