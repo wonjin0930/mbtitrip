@@ -64,6 +64,7 @@
           });
 
           infowindow.open(map, marker);
+          marker.infowindow = infowindow; 
 
           kakao.maps.event.addListener(marker, 'mouseover', () => infowindow.open(map, marker));
           kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
@@ -99,11 +100,10 @@
         if (marker) {
           map.setCenter(marker.getPosition());
           if (activeInfoWindow) activeInfoWindow.close();
-          const infowindow = new kakao.maps.InfoWindow({
-            content: `<div style="padding:6px 12px;font-size:14px;">${marker.getTitle()}</div>`
-          });
-          infowindow.open(map, marker);
-          activeInfoWindow = infowindow;
+          if (marker.infowindow) {
+            marker.infowindow.open(map, marker);
+            activeInfoWindow = marker.infowindow;
+          }
         }
       }
 
