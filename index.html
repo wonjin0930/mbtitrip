@@ -12,7 +12,7 @@
         height: 100%;
       }
     </style>
-    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=f723177a920b33c1e3971e5c58b6ff90&autoload=false"></script>
+    <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=여기에_본인_API_KEY입력&autoload=false"></script>
   </head>
   <body>
     <div id="map"></div>
@@ -51,11 +51,10 @@
           if (!item.lat || !item.lon) return;
 
           const position = new kakao.maps.LatLng(item.lat, item.lon);
-
           const marker = new kakao.maps.Marker({
             map: map,
             position,
-            title: item.name, // ✅ 마커에 name 저장
+            title: item.name,
             image: new kakao.maps.MarkerImage(markerImageUrl, markerSize),
           });
 
@@ -70,7 +69,6 @@
             if (activeInfoWindow) activeInfoWindow.close();
             infowindow.open(map, marker);
             activeInfoWindow = infowindow;
-
             if (window.markerClicked && window.markerClicked.postMessage) {
               window.markerClicked.postMessage(JSON.stringify({ name: item.name }));
             }
@@ -96,7 +94,6 @@
         if (activeInfoWindow) activeInfoWindow.close();
 
         const matchedMarker = currentMarkers.find(m => m.getTitle() === name);
-
         if (matchedMarker) {
           const infowindow = new kakao.maps.InfoWindow({
             content: `<div style="padding:6px 12px;font-size:14px;">${name}</div>`
