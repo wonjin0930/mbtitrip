@@ -32,7 +32,10 @@
       });
 
       function clearMarkers() {
-        currentMarkers.forEach(marker => marker.setMap(null));
+        currentMarkers.forEach(marker => {
+          if (marker.infowindow) marker.infowindow.close();
+          marker.setMap(null);
+        });
         currentMarkers = [];
         activeInfoWindow = null;
       }
@@ -63,14 +66,12 @@
             content: `<div style="padding:6px 12px;font-size:14px;">${item.name}</div>`
           });
 
-          infowindow.open(map, marker);
-          marker.infowindow = infowindow; 
-
-          kakao.maps.event.addListener(marker, 'mouseover', () => infowindow.open(map, marker));
-          kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
+          marker.infowindow = infowindow;
 
           kakao.maps.event.addListener(marker, 'click', () => {
-            if (activeInfoWindow) activeInfoWindow.close();
+            currentMarkers.forEach(m => {
+              if (m.infowindow) m.infowindow.close();
+            });
             infowindow.open(map, marker);
             activeInfoWindow = infowindow;
 
@@ -99,7 +100,9 @@
         const marker = currentMarkers[index];
         if (marker) {
           map.setCenter(marker.getPosition());
-          if (activeInfoWindow) activeInfoWindow.close();
+          currentMarkers.forEach(m => {
+            if (m.infowindow) m.infowindow.close();
+          });
           if (marker.infowindow) {
             marker.infowindow.open(map, marker);
             activeInfoWindow = marker.infowindow;
@@ -110,6 +113,16 @@
       function moveToLocation(lat, lon) {
         const latLng = new kakao.maps.LatLng(lat, lon);
         map.setCenter(latLng);
+        currentMarkers.forEach(m => {
+          if (m.getPosition().getLat() === lat && m.getPosition().getLng() === lon) {
+            if (m.infowindow) {
+              m.infowindow.open(map, m);
+              activeInfoWindow = m.infowindow;
+            }
+          } else {
+            if (m.infowindow) m.infowindow.close();
+          }
+        });
       }
     </script>
   </body>
