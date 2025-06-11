@@ -72,7 +72,6 @@
             activeInfoWindow = infowindow;
 
             if (window.markerClicked && window.markerClicked.postMessage) {
-              // ✅ 이름 정보를 JSON으로 전달
               window.markerClicked.postMessage(JSON.stringify({ name: item.name }));
             }
           });
@@ -104,6 +103,11 @@
           infowindow.open(map, marker);
           activeInfoWindow = infowindow;
         }
+      }
+
+      function moveToLocation(lat, lon) {
+        const latLng = new kakao.maps.LatLng(lat, lon);
+        map.setCenter(latLng);
       }
     </script>
   </body>
