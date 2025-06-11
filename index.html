@@ -63,13 +63,15 @@
         activeInfoWindow = infowindow;
 
         if (window.markerClicked && window.markerClicked.postMessage) {
+          // Ensure the payload includes desc and overview fields as well
           window.markerClicked.postMessage(JSON.stringify({ 
-          name: item.name,
-          lat: item.lat,
-          lon: item.lon,
-          img: item.img || '',
-          address: item.address || '',
-          desc: item.desc || '',
+            name: item.name,
+            lat: item.lat,
+            lon: item.lon,
+            img: item.img || '',
+            address: item.address || '',
+            desc: item.desc || '', // Add desc here
+            overview: item.overview || '' // Add overview here if needed
           }));
         }
       });
@@ -106,5 +108,6 @@
     }
   }
 </script>
+
 </body>
 </html>
