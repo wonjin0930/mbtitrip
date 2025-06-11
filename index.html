@@ -63,7 +63,14 @@
         activeInfoWindow = infowindow;
 
         if (window.markerClicked && window.markerClicked.postMessage) {
-          window.markerClicked.postMessage(JSON.stringify({ name: item.name }));
+          window.markerClicked.postMessage(JSON.stringify({ 
+          name: item.name,
+          lat: item.lat,
+          lon: item.lon,
+          img: item.img || '',
+          address: item.address || '',
+          desc: item.desc || '',
+          }));
         }
       });
 
