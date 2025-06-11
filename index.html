@@ -28,6 +28,9 @@
           level: 7,
         };
         map = new kakao.maps.Map(container, options);
+
+        // ✅ Flutter에 지도 준비 완료 신호를 보내는 log (디버깅 용)
+        console.log("[KakaoMap] Map loaded");
         window.flutterMapReady = true;
       });
 
@@ -55,7 +58,7 @@
           const marker = new kakao.maps.Marker({
             map: map,
             position,
-            title: item.name, // ✅ 마커에 name 저장
+            title: item.name,
             image: new kakao.maps.MarkerImage(markerImageUrl, markerSize),
           });
 
@@ -96,7 +99,6 @@
         if (activeInfoWindow) activeInfoWindow.close();
 
         const matchedMarker = currentMarkers.find(m => m.getTitle() === name);
-
         if (matchedMarker) {
           const infowindow = new kakao.maps.InfoWindow({
             content: `<div style="padding:6px 12px;font-size:14px;">${name}</div>`
