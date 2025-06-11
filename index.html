@@ -55,7 +55,7 @@
           const marker = new kakao.maps.Marker({
             map: map,
             position,
-            title: item.name,
+            title: item.name, // ✅ 마커에 name 저장
             image: new kakao.maps.MarkerImage(markerImageUrl, markerSize),
           });
 
@@ -93,28 +93,21 @@
       }
 
       function focusMarkerAtLatLng(name, lat, lon) {
-        // 기존 마커 다 제거
-        clearMarkers();
+        if (activeInfoWindow) activeInfoWindow.close();
 
-        const markerImageUrl = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png';
-        const markerSize = new kakao.maps.Size(40, 40);
-        const position = new kakao.maps.LatLng(lat, lon);
+        const matchedMarker = currentMarkers.find(m => m.getTitle() === name);
 
-        const marker = new kakao.maps.Marker({
-          map: map,
-          position: position,
-          title: name,
-          image: new kakao.maps.MarkerImage(markerImageUrl, markerSize),
-        });
-
-        const infowindow = new kakao.maps.InfoWindow({
-          content: `<div style="padding:6px 12px;font-size:14px;">${name}</div>`
-        });
-
-        infowindow.open(map, marker);
-        activeInfoWindow = infowindow;
-        currentMarkers.push(marker);
-        map.setCenter(position);
+        if (matchedMarker) {
+          const infowindow = new kakao.maps.InfoWindow({
+            content: `<div style="padding:6px 12px;font-size:14px;">${name}</div>`
+          });
+          infowindow.open(map, matchedMarker);
+          activeInfoWindow = infowindow;
+          map.setCenter(matchedMarker.getPosition());
+        } else {
+          const position = new kakao.maps.LatLng(lat, lon);
+          map.setCenter(position);
+        }
       }
     </script>
   </body>
