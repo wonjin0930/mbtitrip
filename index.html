@@ -16,31 +16,34 @@
   let currentMarkers = [];
   let activeInfoWindow = null;
 
+  // 카카오 맵 로딩 후 지도 초기화
   kakao.maps.load(function () {
     map = new kakao.maps.Map(document.getElementById('map'), {
-      center: new kakao.maps.LatLng(37.5665, 126.9780),
-      level: 7,
+      center: new kakao.maps.LatLng(37.5665, 126.9780), // 서울 중심
+      level: 7,  // 지도 확대 레벨
     });
     console.log("[KakaoMap] Map loaded");
-    window.flutterMapReady = true;
+    window.flutterMapReady = true;  // Flutter로 지도 로드 완료 알림
   });
 
+  // 마커 초기화 및 제거
   function clearMarkers() {
     currentMarkers.forEach(marker => marker.setMap(null));
     currentMarkers = [];
     activeInfoWindow = null;
   }
 
+  // 마커 렌더링 함수
   function renderMarkers(data, category) {
     clearMarkers();
     const markerImageUrl = category === '관광지'
       ? 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png'
       : 'https://wonjin0930.github.io/mbtitrip/image/restaurant.png';
 
-    const markerSize = new kakao.maps.Size(40, 40);
+    const markerSize = new kakao.maps.Size(40, 40);  // 마커 크기 설정
 
     data.forEach(item => {
-      if (!item.lat || !item.lon) return;
+      if (!item.lat || !item.lon) return;  // 위도와 경도가 없는 데이터는 무시
 
       const position = new kakao.maps.LatLng(item.lat, item.lon);
       const marker = new kakao.maps.Marker({
@@ -51,27 +54,29 @@
       });
 
       const infowindow = new kakao.maps.InfoWindow({
-        content: `<div style="padding:6px 12px;font-size:14px;">${item.name}</div>`
+        content: `<div style="padding:6px 12px;font-size:14px;">${item.name}</div>`  // 마커 정보 창
       });
 
+      // 마커에 마우스오버 이벤트 추가
       kakao.maps.event.addListener(marker, 'mouseover', () => infowindow.open(map, marker));
       kakao.maps.event.addListener(marker, 'mouseout', () => infowindow.close());
 
+      // 마커 클릭 시, 세부 정보 Flutter로 전달
       kakao.maps.event.addListener(marker, 'click', () => {
-        if (activeInfoWindow) activeInfoWindow.close();
+        if (activeInfoWindow) activeInfoWindow.close();  // 기존 열린 InfoWindow 닫기
         infowindow.open(map, marker);
         activeInfoWindow = infowindow;
 
         if (window.markerClicked && window.markerClicked.postMessage) {
-          // Ensure the payload includes desc and overview fields as well
+          // 마커 정보를 Flutter로 전달
           window.markerClicked.postMessage(JSON.stringify({ 
             name: item.name,
             lat: item.lat,
             lon: item.lon,
             img: item.img || '',
             address: item.address || '',
-            desc: item.desc || '', // Add desc here
-            overview: item.overview || '' // Add overview here if needed
+            desc: item.desc || '',
+            overview: item.overview || ''  // 상세 설명 추가
           }));
         }
       });
@@ -80,6 +85,7 @@
     });
   }
 
+  // 지역별 지도 이동 함수
   function moveToRegion(region) {
     const coords = {
       '경주': new kakao.maps.LatLng(35.8562, 129.2247),
@@ -88,10 +94,11 @@
       '평창': new kakao.maps.LatLng(37.3704, 128.3899),
     };
     if (coords[region]) {
-      map.setCenter(coords[region]);
+      map.setCenter(coords[region]);  // 해당 지역으로 지도 중심 이동
     }
   }
 
+  // 마커 위치로 이동 및 선택된 마커에 초점 맞추기
   function focusMarkerAtLatLng(name, lat, lon) {
     if (activeInfoWindow) activeInfoWindow.close();
 
@@ -102,9 +109,9 @@
       });
       infowindow.open(map, matchedMarker);
       activeInfoWindow = infowindow;
-      map.setCenter(matchedMarker.getPosition());
+      map.setCenter(matchedMarker.getPosition());  // 마커로 지도 이동
     } else {
-      map.setCenter(new kakao.maps.LatLng(lat, lon));
+      map.setCenter(new kakao.maps.LatLng(lat, lon));  // 마커가 없으면 직접 좌표로 이동
     }
   }
 </script>
