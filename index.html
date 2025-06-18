@@ -114,6 +114,11 @@
       map.setCenter(new kakao.maps.LatLng(lat, lon));  // 마커가 없으면 직접 좌표로 이동
     }
   }
+
+  // `moveToLocation` 함수가 호출될 때 `focusMarkerAtLatLng` 호출하도록 변경
+  window.moveToLocation = function(name, lat, lon) {
+    focusMarkerAtLatLng(name, lat, lon);
+  }
 </script>
 
 </body>
